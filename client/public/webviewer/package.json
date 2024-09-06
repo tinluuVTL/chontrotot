@@ -1,0 +1,30 @@
+{
+  "version": "10.6.0",
+  "name": "@pdftron/webviewer",
+  "main": "webviewer.min.js",
+  "author": "Apryse",
+  "homepage": "https://docs.apryse.com/documentation/web/",
+  "keywords": [
+    "PDF SDK",
+    "WebViewer",
+    "View PDF",
+    "Annotate PDF",
+    "Annotate MS Office",
+    "JavaScript PDF SDK",
+    "JS PDF SDK",
+    "Edit PDF",
+    "Sign PDF",
+    "Manipulate PDF",
+    "PDF Form",
+    "Annotate doc",
+    "Annotate docx",
+    "Annotate ppt",
+    "Annotate pptx",
+    "CAD SDK"
+  ],
+  "types": "./types.d.ts",
+  "build": "MTU3NTkzMDE2ODA2OC02LjAuMC1iZXRhLTM=",
+  "scripts": {
+    "optimize": "node scripts/optimize-for-prod.js"
+  }
+}

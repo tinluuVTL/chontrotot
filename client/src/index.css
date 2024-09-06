@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-size: 14px;
+  font-family: "Noto Sans JP", sans-serif;
+  height: 100%;
+}
+body {
+  box-sizing: border-box;
+}
+
+@media screen /* and (min-device-width: 1200px) */ and (max-device-width: 768px) and (-webkit-min-device-pixel-ratio: 1) {
+  .otp-item {
+    width: 2.7rem !important;
+  }
+}
+@media screen and (min-device-width: 769px) /* and (max-device-width: 768px) */ and (-webkit-min-device-pixel-ratio: 1) {
+  .otp-item {
+    width: 4rem !important;
+  }
+}
+#line-chart {
+  width: 100% !important;
+}
