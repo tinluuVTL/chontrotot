@@ -4,14 +4,10 @@ const pathname = {
     DASHBOARD: "thong-ke",
     MANAGE_DASHBOARD: "thong-ke-chu-tro",
     MANAGE_USER: "quan-ly-thanh-vien",
-    MANAGE_ROOM: "quan-ly-phong-tro",
-    MANAGE_CONTRACT: "quan-ly-hop-dong",
-    CREATE_CONTRACT: "them-hop-dong",
+    
     MANAGE_POST: "quan-ly-tin-dang",
     CREATE_POST: "tao-moi-tin-dang",
-    MANAGE_CUSTOMER: "quan-ly-nguoi-thue",
-    UPDATE_POST: "cap-nhat-tin-dang",
-    UPDATE_POST__POSTID: "cap-nhat-tin-dang/:postId",
+    
   },
   user: {
     PROFILE: "thong-tin-ca-nhan",
@@ -30,6 +26,7 @@ const pathname = {
     MANAGE_CUSTOMER: "quan-ly-nguoi-thue",
     UPDATE_POST: "cap-nhat-tin-dang",
     UPDATE_POST__POSTID: "cap-nhat-tin-dang/:postId",
+
   },
   public: {
     LAYOUT: "/",
@@ -39,6 +36,10 @@ const pathname = {
     PHONGTRO: "cho-thue-phong-tro",
     TIMGHEP: "tim-nguoi-o-ghep",
     TRANGCHU: "trang-chu",
+    TINTUC:"tin-tuc",
+    DETAIL_NEW:"tin-tuc",
+    DETAIL_NEW__PID:"tin-tuc/:pid/:title",
+    LIENHE: "lien-he",
     DETAIL_POST: "tin-dang",
     DETAIL_POST__PID: "tin-dang/:pid/:title",
     CHECKOUT: "thanh-toan-phong-tro",

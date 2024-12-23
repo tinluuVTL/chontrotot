@@ -63,11 +63,26 @@ module.exports = {
       description:
         "Tìm người ở ghép, tìm nam ở ghép, tìm nữ ở ghép, share phòng trọ, tìm chỗ ở ghép cùng, tìm bạn ở ghép, xin ở ghép mới nhất 2023. Đăng tin ở ghép hiệu quả, nhanh chóng nhất...",
     },
+    {
+      value: "Tin Tức",
+      slug: slugify("Tin Tức").toLowerCase(),
+      text: "Tin Tức mới nhất về Chọn Trọ Tốt",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      description:
+        "Cập nhập tin tức thường xuyên, việc tìm kiếm và quản lý nhà trọ.",
+    },
   ],
   convenients: [
     {
       name: "Wifi miễn phí",
       image: "/convenients/wifi.svg",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      name: "Cap Truyền Hình Miễn Phí",
+      image: "/convenients/cap.svg",
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -97,11 +112,11 @@ module.exports = {
     createdAt: new Date(),
     updatedAt: new Date(),
   })),
-  posts: Array.from([...Array(20).keys()]).map(() => ({
+  posts: Array.from([...Array(30).keys()]).map(() => ({
     title: faker.lorem.sentence({ min: 5, max: 10 }),
     description: faker.lorem.sentences({ max: 10, min: 5 }),
     address: faker.location.streetAddress({ useFullAddress: true }),
-    catalogId: faker.number.int({ max: 4, min: 2 }),
+    catalogId: faker.number.int({ max: 5, min: 2 }),
     images: JSON.stringify(
       Array.from([...Array(faker.number.int({ max: 8, min: 4 })).keys()]).map(
         () =>
@@ -119,6 +134,7 @@ module.exports = {
     price: faker.string.numeric({ length: { min: 3, max: 5 } }) * 1000,
     electricPrice: faker.string.numeric({ length: { min: 1, max: 1 } }) * 1000,
     waterPrice: faker.string.numeric({ length: { min: 2, max: 2 } }) * 1000,
+   
     capsPrice: faker.string.numeric({ length: { min: 2, max: 2 } }) * 1000,
     internetPrice: faker.string.numeric({ length: { min: 3, max: 3 } }) * 1000,
     area: faker.number.int({ min: 20, max: 200 }),
@@ -133,6 +149,7 @@ module.exports = {
     price: faker.string.numeric({ length: { min: 3, max: 5 } }) * 1000,
     electricPrice: faker.string.numeric({ length: { min: 1, max: 1 } }) * 1000,
     waterPrice: faker.string.numeric({ length: { min: 2, max: 2 } }) * 1000,
+   
     capsPrice: faker.string.numeric({ length: { min: 2, max: 2 } }) * 1000,
     internetPrice: faker.string.numeric({ length: { min: 3, max: 3 } }) * 1000,
     area: faker.number.int({ min: 20, max: 200 }),

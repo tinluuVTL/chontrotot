@@ -1,6 +1,6 @@
-import clsx from "clsx"
-import React from "react"
-import { twMerge } from "tailwind-merge"
+import clsx from "clsx";
+import React from "react";
+import { twMerge } from "tailwind-merge";
 
 const InputForm = ({
   register = () => {},
@@ -14,6 +14,7 @@ const InputForm = ({
   containerClassName,
   validate,
   readOnly,
+  textarea,
 }) => {
   return (
     <div
@@ -26,26 +27,40 @@ const InputForm = ({
           {title + ":"}
         </label>
       )}
-      <input
-        type={type}
-        readOnly={readOnly}
-        className={twMerge(
-          clsx(
-            isForm && "form-input",
-            "placeholder:text-gray-500 rounded-md border border-gray-300 w-full",
-            readOnly &&
-              "focus:outline-none focus:ring-0 focus:border-gray-300 bg-gray-100",
-            inputClassName
-          )
-        )}
-        placeholder={placeholder}
-        {...register(id, validate)}
-      />
+      {textarea ? (
+        <textarea
+          className={twMerge(
+            clsx(
+              isForm && "form-input",
+              "placeholder:text-gray-500 rounded-md border border-gray-300 w-full",
+              readOnly && "focus:outline-none focus:ring-0 focus:border-gray-300 bg-gray-100",
+              inputClassName
+            )
+          )}
+          placeholder={placeholder}
+          {...register(id, validate)}
+        />
+      ) : (
+        <input
+          type={type}
+          readOnly={readOnly}
+          className={twMerge(
+            clsx(
+              isForm && "form-input",
+              "placeholder:text-gray-500 rounded-md border border-gray-300 w-full",
+              readOnly && "focus:outline-none focus:ring-0 focus:border-gray-300 bg-gray-100",
+              inputClassName
+            )
+          )}
+          placeholder={placeholder}
+          {...register(id, validate)}
+        />
+      )}
       {errors && errors[id] && (
         <small className="text-xs text-red-600">{errors[id].message}</small>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default InputForm
+export default InputForm;

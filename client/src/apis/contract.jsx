@@ -35,3 +35,10 @@ export const apiGetCustomer = (params) =>
     method: "get",
     params,
   })
+// Thêm API mới cho tính năng gửi email liên hệ
+export const apiSendContactEmail = (data) =>
+  axios({
+    url: "/contract/contact-email",
+    method: "post",
+    data, // data bao gồm: name, email, phone, message
+  })

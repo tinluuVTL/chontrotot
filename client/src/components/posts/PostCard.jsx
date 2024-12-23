@@ -5,6 +5,8 @@ import pathname from "~/utilities/path"
 import slugify from "slugify"
 import { twMerge } from "tailwind-merge"
 import clsx from "clsx"
+import { CiPhone } from "react-icons/ci"
+import moment from "moment" // Make sure to import moment
 
 const PostCard = ({ images = [], title, star = 0, address, rRooms = [], rCatalog, bgCatalog, id, rUser }) => {
   return (
@@ -28,16 +30,22 @@ const PostCard = ({ images = [], title, star = 0, address, rRooms = [], rCatalog
         >
           {title}
         </Link>
-        <span className=" flex items-center">
+        <span className="flex items-center">
           {renderStar(+star)?.map((el, idx) => (
             <span className="text-lg" key={idx}>
               {el}
             </span>
           ))}
         </span>
-        <span>
-          🚩 <span>{address}</span>
-        </span>
+        <div className="flex justify-between items-center">
+          <span className="flex items-center">
+            🚩 <span>{address}</span>
+          </span>
+          <span>
+            Ngày đăng tin:{" "}
+            <span>{moment(rUser?.updatedAt).format("DD/MM/YYYY")}</span>
+          </span>
+        </div>
         <span>
           📢 Còn{" "}
           <span className="font-bold text-orange-500">
@@ -48,7 +56,7 @@ const PostCard = ({ images = [], title, star = 0, address, rRooms = [], rCatalog
         {rRooms?.length > 0 && (
           <span>
             <span className="text-orange-600 text-2xl">
-              {rRooms.length === 1
+              💵 {rRooms.length === 1
                 ? `${formatMoney(rRooms[0]?.price)}`
                 : `${formatMoney(
                     rRooms.map((el) => el.price).reduce((a, b) => Math.min(a, b))
@@ -57,14 +65,38 @@ const PostCard = ({ images = [], title, star = 0, address, rRooms = [], rCatalog
             VNĐ
           </span>
         )}
-        <span className="flex items-center gap-2">
-          <img
-            src={rUser?.rprofile?.image || "/user.svg"}
-            alt=""
-            className="w-8 h-8 object-cover rounded-full"
-          />
-          <span>{rUser?.username}</span>
-        </span>
+        {rRooms?.length > 0 && (
+          <span>
+            🏠{" "}
+            <span className="text-orange-600 text-2xl">
+              {rRooms.length === 1
+                ? `${formatMoney(rRooms[0]?.area)}`
+                : `${formatMoney(
+                    rRooms.map((el) => el.area).reduce((a, b) => Math.min(a, b))
+                  )} ~ ${formatMoney(rRooms.map((el) => el.area).reduce((a, b) => Math.max(a, b)))}`}
+            </span>{" "}
+            m2
+          </span>
+        )}
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-2">
+            <img
+              src={rUser?.rprofile?.image || "/user.svg"}
+              alt=""
+              className="w-8 h-8 object-cover rounded-full"
+            />
+            <span>{rUser?.username}</span>
+          </span>
+          <a
+            onClick={() => {
+              window.location.href = `tel:${rUser?.phone}`;
+            }}
+            className="flex my-4 gap-2 items-center font-bold justify-center py-2 rounded-md bg-green-600 text-white"
+          >
+            <CiPhone size={20} /> {rUser?.phone} 
+            Gọi ngay
+          </a>
+        </div>
       </div>
     </div>
   )

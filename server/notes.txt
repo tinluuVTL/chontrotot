@@ -5,3 +5,26 @@ npx sequelize-cli seed:generate --name demo-user
 npx sequelize-cli db:seed:all
 npx sequelize-cli db:seed:undo
 npx sequelize-cli db:seed:undo:all
+
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyD7CWJR4mXXs1GilS64wVT69qhRqWnvmP0",
+  authDomain: "chontrotot-9c177.firebaseapp.com",
+  projectId: "chontrotot-9c177",
+  storageBucket: "chontrotot-9c177.firebasestorage.app",
+  messagingSenderId: "228289651565",
+  appId: "1:228289651565:web:ff5fd54bd8f6f250c1b064",
+  measurementId: "G-QVK06TK2EM"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);

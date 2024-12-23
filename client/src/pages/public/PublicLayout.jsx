@@ -8,6 +8,7 @@ const PublicLayout = () => {
     <main className="bg-white">
       <LogoContainer />
       <Navigation />
+     
       <Outlet />
       <Footer />
     </main>

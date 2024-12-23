@@ -1,49 +1,50 @@
-import Carousel from "nuka-carousel"
-import React, { useEffect, useRef, useState } from "react"
-import { useParams } from "react-router-dom"
-import { apiGetPostById, apiGetPosts } from "~/apis/post"
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
-import { twMerge } from "tailwind-merge"
-import clsx from "clsx"
-import { formatMoney, renderStar } from "~/utilities/fn"
-import moment from "moment"
-import DOMPurify from "dompurify"
-import { CiPhone } from "react-icons/ci"
-import { Map } from "~/components/maps"
-import { RelatedCard, RelatedPosts } from "~/components/posts"
-import { RoomCard } from "~/components/rooms"
-import { Rating } from "~/components/ratings"
-import { useAppStore } from "~/store"
+import Carousel from "nuka-carousel";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import { apiGetPostById, apiGetPosts } from "~/apis/post";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { twMerge } from "tailwind-merge";
+import clsx from "clsx";
+import { formatMoney, renderStar } from "~/utilities/fn";
+import moment from "moment";
+import DOMPurify from "dompurify";
+import { CiPhone } from "react-icons/ci";
+import { Map } from "~/components/maps";
+import { RelatedCard, RelatedPosts } from "~/components/posts";
+import { RoomCard } from "~/components/rooms";
+import { Rating } from "~/components/ratings";
+import { useAppStore } from "~/store";
+import { FaGoogle } from 'react-icons/fa';
 
 const DetailPost = () => {
-  const { pid } = useParams()
-  const [post, setPost] = useState()
-  const [newPosts, setNewPosts] = useState()
-  const [relatedPost, setRelatedPost] = useState()
-  const titleRef = useRef()
-  const { isShowModal } = useAppStore()
+  const { pid } = useParams();
+  const [post, setPost] = useState();
+  const [newPosts, setNewPosts] = useState();
+  const [relatedPost, setRelatedPost] = useState();
+  const titleRef = useRef();
+  const { isShowModal } = useAppStore();
   const fetchPostDetail = async () => {
-    const response = await apiGetPostById(pid)
-    if (response.success) setPost(response.post)
-  }
+    const response = await apiGetPostById(pid);
+    if (response.success) setPost(response.post);
+  };
   const fetchNewPosts = async () => {
-    const response = await apiGetPosts({ limit: 5, sort: "-createdAt" })
-    if (response.success) setNewPosts(response.posts.rows)
-  }
+    const response = await apiGetPosts({ limit: 5, sort: "-createdAt" });
+    if (response.success) setNewPosts(response.posts.rows);
+  };
   const fetchPostsByCatalog = async (catalogId) => {
-    const response = await apiGetPosts({ limit: 5, catalogId })
-    if (response.success) setRelatedPost(response.posts.rows)
-  }
+    const response = await apiGetPosts({ limit: 5, catalogId });
+    if (response.success) setRelatedPost(response.posts.rows);
+  };
   useEffect(() => {
-    !isShowModal && fetchPostDetail()
-    fetchNewPosts()
+    !isShowModal && fetchPostDetail();
+    fetchNewPosts();
     // titleRef.current.scrollIntoView({ block: "center" })
-  }, [pid, isShowModal])
+  }, [pid, isShowModal]);
   useEffect(() => {
     if (post && post?.catalogId) {
-      fetchPostsByCatalog(post?.catalogId)
+      fetchPostsByCatalog(post?.catalogId);
     }
-  }, [post])
+  }, [post]);
   return (
     <div className="w-full p-4 lg:w-main mx-auto grid grid-cols-7 lg:grid-cols-10 gap-4">
       <div className="col-span-7 my-4 flex flex-col gap-4">
@@ -81,7 +82,11 @@ const DetailPost = () => {
             wrapAround={false}
           >
             {post?.images?.map((el, idx) => (
-              <img src={el} key={idx} className="h-[200px] lg:h-[300px] object-contain  mx-auto" />
+              <img
+                src={el}
+                key={idx}
+                className="h-[200px] lg:h-[300px] object-contain  mx-auto"
+              />
             ))}
           </Carousel>
         </div>
@@ -104,7 +109,8 @@ const DetailPost = () => {
             Địa chỉ: <span>{post?.address}</span>
           </span>
           <span>
-            Này cập nhật gần nhất: <span>{moment(post?.updatedAt).format("DD/MM/YYYY")}</span>
+            Này cập nhật gần nhất:{" "}
+            <span>{moment(post?.updatedAt).format("DD/MM/YYYY")}</span>
           </span>
         </div>
         <div
@@ -112,6 +118,23 @@ const DetailPost = () => {
             __html: DOMPurify.sanitize(post?.description),
           }}
         />
+        
+        <span>
+          <h2 className="font-bold mb-4"> Vị trí phòng trọ</h2>
+          <span>(Note:Nhấn vào để chuyển vị trí nếu Google Map bên dưới không hiển thị.)
+          </span><br />
+          <b>Địa chỉ:</b>{" "}
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+              post?.address
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:underline"
+          >
+            {post?.address}
+          </a>
+        </span>
         <div className="w-full h-[200px]">
           <Map address={post?.address} />
         </div>
@@ -126,7 +149,12 @@ const DetailPost = () => {
           </div>
         </div>
         <div>
-          <Rating title={post?.title} pid={post?.id} averageStarPoint={post?.star} detail={post?.rRating} />
+          <Rating
+            title={post?.title}
+            pid={post?.id}
+            averageStarPoint={post?.star}
+            detail={post?.rRating}
+          />
         </div>
       </div>
       <div className="col-span-7 flex flex-col gap-4 lg:col-span-3">
@@ -141,8 +169,10 @@ const DetailPost = () => {
             ID: <span className="font-semibold">#{post?.rUser?.id}</span>
           </small>
           <a
-            href={`https://zalo.me/${post?.rUser?.phone}`}
-            className="flex my-4 gap-2 items-center font-bold justify-center py-2 w-full rounded-md bg-orange-600 text-white"
+            onClick={() => {
+              window.location.href = `tel:${post?.rUser?.phone}`;
+            }}
+            className="flex my-4 gap-2 items-center font-bold justify-center py-2 w-full rounded-md bg-green-600 text-white"
           >
             <CiPhone size={20} /> {post?.rUser?.phone}
           </a>
@@ -174,7 +204,7 @@ const DetailPost = () => {
         </RelatedPosts>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DetailPost
+export default DetailPost;

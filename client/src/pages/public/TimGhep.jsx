@@ -11,7 +11,7 @@ import { useAppStore, usePostStore } from "~/store"
 const TimGhep = () => {
   const location = useLocation()
   const { catalogs } = useAppStore()
-  const {
+  const { 
     register,
     formState: { errors },
     handleSubmit,

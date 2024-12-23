@@ -28,7 +28,7 @@ const ApproveContractDialog = ({ contract, onClose, onApprove }) => {
         <h2 className="text-lg font-bold mb-4">Duyệt hợp đồng</h2>
         <p>Bạn có chắc chắn muốn duyệt hợp đồng cho phòng <strong>{contract?.rRoom?.title}</strong> không?</p>
         <div className="flex justify-end mt-4">
-          <Button onClick={onClose} className="mr-2">Đóng</Button>
+          <Button onClick={onClose} className="mr-2">❌</Button>
           <Button onClick={handleApprove} className="bg-green-500 text-white hover:bg-green-600">Chấp nhận</Button>
         </div>
       </div>

@@ -66,7 +66,7 @@ Tiếp theo, mở terminal forder client chạy server lên bằng lệnh: `npm 
 Tương tự server, client cũng có file .env, tạo file .evn ở client forder. Điền hết thông tin trong đó:
 
 - `VITE_FB_API_KEY`, `VITE_FB_AUTH_DOMAIN`, `VITE_FB_PROJECT_ID`, `VITE_FB_STORAGE_BUCKET`, `VITE_FB_MESSAGING_SENDER_ID`, `VITE_FB_APP_ID` là đăng ký app trên firebase lấy được.
-- `VITE_CLOUDINARY_NAME` và `VITE_CLOUDINARY_UPLOAD_PRESETS` tương ứng là cloud name của tài khoản Cloudinary và preset để upload _(Trong phần setting upload, tạo new upload preset kiểu unsigned)_
+- `VITE_CLOUDINARY_NAME` và `VITE_CLOUDINARY_UPLOAD_PRESETS` tương ứng là cloud name của tài khoản Cloudinary và preset để upload _(Trong phần setting upload, tạo new upload preset kiểu unsigned)
 - `VITE_TINYCME_API_KEY` là đăng ký tài khoản của TinyMCE lấy free api key.
 - `VITE_LIMIT_POSTS` là só lượng tin đăng hiện thị mỗi trang, recommend = 5
 

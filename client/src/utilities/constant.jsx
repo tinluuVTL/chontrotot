@@ -59,44 +59,61 @@ export const userSidebar = [
     icon: <IoHomeOutline size={20} />,
   },
 ]
-export const managerSidebar = [
-  {
-    id: 1,
-    name: "Thống kê",
-    path: `/${pathname.manager.LAYOUT}/${pathname.manager.DASHBOARD}`,
-    icon: <MdOutlineDashboard size={20} />,
-  },
-  {
-    id: 4,
-    name: "Quản lý tin đăng",
-    path: `/${pathname.manager.LAYOUT}/${pathname.manager.MANAGE_POST}`,
-    icon: <BsReverseLayoutTextWindowReverse size={20} />,
-  },
-  {
-    id: 2,
-    name: "Quản lý phòng trọ",
-    path: `/${pathname.manager.LAYOUT}/${pathname.manager.MANAGE_ROOM}`,
-    icon: <MdOutlineBedroomParent size={20} />,
-  },
-  {
-    id: 3,
-    name: "Quản lý hợp đồng",
-    path: `/${pathname.manager.LAYOUT}/${pathname.manager.MANAGE_CONTRACT}`,
-    icon: <LiaFileContractSolid size={20} />,
-  },
-  {
-    id: 6,
-    name: "Quản lý người thuê",
-    path: `/${pathname.manager.LAYOUT}/${pathname.manager.MANAGE_CUSTOMER}`,
-    icon: <BsPersonBoundingBox size={20} />,
-  },
-  {
-    id: 999,
-    name: "Homepage",
-    path: `/`,
-    icon: <IoHomeOutline size={20} />,
-  },
-]
+export const getManagerSidebar = (currentUserRoles) => {
+  const sidebarItems = [
+    {
+      id: 1,
+      name: "Thống kê",
+      path: `/${pathname.manager.LAYOUT}/${pathname.manager.DASHBOARD}`,
+      icon: <MdOutlineDashboard size={20} />,
+    },
+    {
+      id: 4,
+      name: "Quản lý tin đăng",
+      path: `/${pathname.manager.LAYOUT}/${pathname.manager.MANAGE_POST}`,
+      icon: <BsReverseLayoutTextWindowReverse size={20} />,
+    },
+    {
+      id: 2,
+      name: "Quản lý phòng trọ",
+      path: `/${pathname.manager.LAYOUT}/${pathname.manager.MANAGE_ROOM}`,
+      icon: <MdOutlineBedroomParent size={20} />,
+    },
+    {
+      id: 3,
+      name: "Quản lý hợp đồng",
+      path: `/${pathname.manager.LAYOUT}/${pathname.manager.MANAGE_CONTRACT}`,
+      icon: <LiaFileContractSolid size={20} />,
+    },
+    {
+      id: 6,
+      name: "Quản lý người thuê",
+      path: `/${pathname.manager.LAYOUT}/${pathname.manager.MANAGE_CUSTOMER}`,
+      icon: <BsPersonBoundingBox size={20} />,
+    },
+    {
+      id: 999,
+      name: "Homepage",
+      path: `/`,
+      icon: <IoHomeOutline size={20} />,
+    },
+  ];
+
+  // Check if the user has both ADMIN and MANAGER roles
+  const hasAdminAndManagerRole = currentUserRoles?.some((role) => role.roleCode === "ADMIN") &&
+                                  currentUserRoles?.some((role) => role.roleCode === "MANAGER");
+
+  // If the user has both roles, return only the specified items
+  if (hasAdminAndManagerRole) {
+    return sidebarItems.filter(item => [1, 4, 999].includes(item.id));
+  }
+
+  return sidebarItems; // Return all items for other users
+};
+
+// Example usage
+const currentUserRoles = [/* user roles data */];
+const managerSidebarItems = getManagerSidebar(currentUserRoles);
 export const adminSidebar = [
   {
     id: 1,
@@ -116,24 +133,24 @@ export const adminSidebar = [
     path: `/${pathname.admin.LAYOUT}/${pathname.admin.MANAGE_POST}`,
     icon: <BsReverseLayoutTextWindowReverse size={20} />,
   },
-  {
-    id: 4,
-    name: "Quản lý phòng trọ",
-    path: `/${pathname.admin.LAYOUT}/${pathname.admin.MANAGE_ROOM}`,
-    icon: <MdOutlineBedroomParent size={20} />,
-  },
-  {
-    id: 5,
-    name: "Quản lý hợp đồng",
-    path: `/${pathname.admin.LAYOUT}/${pathname.admin.MANAGE_CONTRACT}`,
-    icon: <LiaFileContractSolid size={20} />,
-  },
-  {
-    id: 6,
-    name: "Quản lý người thuê",
-    path: `/${pathname.admin.LAYOUT}/${pathname.admin.MANAGE_CUSTOMER}`,
-    icon: <BsPersonBoundingBox size={20} />,
-  },
+  // {
+  //   id: 4,
+  //   name: "Quản lý phòng trọ",
+  //   path: `/${pathname.admin.LAYOUT}/${pathname.admin.MANAGE_ROOM}`,
+  //   icon: <MdOutlineBedroomParent size={20} />,
+  // },
+  // {
+  //   id: 5,
+  //   name: "Quản lý hợp đồng",
+  //   path: `/${pathname.admin.LAYOUT}/${pathname.admin.MANAGE_CONTRACT}`,
+  //   icon: <LiaFileContractSolid size={20} />,
+  // },
+  // {
+  //   id: 6,
+  //   name: "Quản lý người thuê",
+  //   path: `/${pathname.admin.LAYOUT}/${pathname.admin.MANAGE_CUSTOMER}`,
+  //   icon: <BsPersonBoundingBox size={20} />,
+  // },
   {
     id: 7,
     name: "Quản lý thành viên",

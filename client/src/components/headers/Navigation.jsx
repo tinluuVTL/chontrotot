@@ -34,6 +34,17 @@ const Navigation = () => {
         >
           Tìm kiếm
         </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            clsx(
+              "px-4 py-3 font-semibold hover:text-orange-300",
+              isActive && "bg-orange-600"
+            )
+          }
+          to={`/${pathname.public.LIENHE}`}
+        >
+          Giới Thiệu & Liên Hệ
+        </NavLink>
       </div>
     </div>
   )

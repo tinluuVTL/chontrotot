@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler")
 const db = require("../models")
-
+const nodemailer = require('nodemailer') 
 module.exports = {
   create: asyncHandler(async (req, res) => {
     const { firstName, lastName, CID, address, ...data } = req.body
@@ -343,4 +343,39 @@ module.exports = {
       contracts: response,
     })
   }),
+  sendContactEmail: asyncHandler(async (req, res) => {
+  const { name, email, phone, message } = req.body;
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_NAME,
+      pass: process.env.EMAIL_APP_PASSWORD,
+    },
+  });
+
+  const mailOptions = {
+    from: 'vantinluu.vtl@gmail.com',
+    to: 'chontrotot.io.vn@gmail.com', 
+    subject: 'Thông Tin đăng ký chủ trọ mới !',
+    text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return res.json({ 
+      success: true,
+      mes: 'Email sent successfully' 
+    });
+  } catch (error) {
+    return res.status(500).json({ 
+      success: false,
+      mes: 'Failed to send email',
+      error: error.message 
+    });
+  }
+})
 }
+// Thêm dấu phẩy ở đây và đặt sendContactEmail vào trong object
+
+

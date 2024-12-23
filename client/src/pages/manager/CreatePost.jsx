@@ -1,20 +1,25 @@
-import React, { useState } from "react"
-import { useForm } from "react-hook-form"
-import { Button } from "~/components/commons"
-import { InputFile, InputForm, InputSelect, InputText } from "~/components/inputs"
-import { useAppStore, useUserStore } from "~/store"
-import readXlsxFile from "read-excel-file"
-import Swal from "sweetalert2"
-import { toast } from "react-toastify"
-import { RiDeleteBin6Line, RiFileEditLine } from "react-icons/ri"
-import { EditRoom } from "~/components/user"
-import { apiCreateNewPost } from "~/apis/post"
-import { CreateRoom } from "~/components/posts"
-import { Navigate } from "react-router-dom"
-import pathname from "~/utilities/path"
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "~/components/commons";
+import {
+  InputFile,
+  InputForm,
+  InputSelect,
+  InputText,
+} from "~/components/inputs";
+import { useAppStore, useUserStore } from "~/store";
+import readXlsxFile from "read-excel-file";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import { RiDeleteBin6Line, RiFileEditLine } from "react-icons/ri";
+import { EditRoom } from "~/components/user";
+import { apiCreateNewPost } from "~/apis/post";
+import { CreateRoom } from "~/components/posts";
+import { Navigate } from "react-router-dom";
+import pathname from "~/utilities/path";
 
 const CreatePost = () => {
-  const { resetImages, current } = useUserStore()
+  const { resetImages, current } = useUserStore();
   if (
     !current?.rprofile ||
     !current.rprofile?.firstName ||
@@ -29,8 +34,10 @@ const CreatePost = () => {
       showCancelButton: false,
       showConfirmButton: true,
       confirmButtonText: "Tôi biết rồi",
-    })
-    return <Navigate to={`/${pathname.user.LAYOUT}/${pathname.user.PROFILE}`} />
+    });
+    return (
+      <Navigate to={`/${pathname.user.LAYOUT}/${pathname.user.PROFILE}`} />
+    );
   }
   const {
     register,
@@ -38,17 +45,18 @@ const CreatePost = () => {
     handleSubmit,
     reset,
     setValue,
-  } = useForm()
-  const { setModal } = useAppStore()
-  const { catalogs } = useAppStore()
-  const [rooms, setRooms] = useState([])
-  const [createRoomMode, setCreateRoomMode] = useState("FILE")
+  } = useForm();
+  const { setModal } = useAppStore();
+  const { catalogs } = useAppStore();
+  const [rooms, setRooms] = useState([]);
+  const [createRoomMode, setCreateRoomMode] = useState("FILE");
   const handleReadFileExcel = async (e) => {
-    const file = e.target.files[0]
-    if (!file.type.includes("spreadsheetml.sheet")) return Swal.fire("Oops!", "Chỉ hỗ trợ file Excel", "info")
-    const rows = await readXlsxFile(file)
+    const file = e.target.files[0];
+    if (!file.type.includes("spreadsheetml.sheet"))
+      return Swal.fire("Oops!", "Chỉ hỗ trợ file Excel", "info");
+    const rows = await readXlsxFile(file);
     if (rows && rows.length > 0) {
-      const roomData = []
+      const roomData = [];
       for (let row of rows) {
         if (row[0] === "ROOM")
           roomData.push({
@@ -60,32 +68,32 @@ const CreatePost = () => {
             waterPrice: row[6],
             capsPrice: row[7],
             internetPrice: row[8],
-          })
+          });
       }
-      setRooms(roomData)
-    } else toast.warn("File rỗng.")
-  }
+      setRooms(roomData);
+    } else toast.warn("File rỗng.");
+  };
   const handlePublishPost = async (data) => {
-    const payload = { ...data, rooms }
-    delete payload.roomfile
-    const response = await apiCreateNewPost(payload)
+    const payload = { ...data, rooms };
+    delete payload.roomfile;
+    const response = await apiCreateNewPost(payload);
     if (response.success) {
-      toast.success(response.mes)
-      reset()
-      setRooms([])
-      resetImages(true)
-    } else toast.error(response.mes)
-  }
+      toast.success(response.mes);
+      reset();
+      setRooms([]);
+      resetImages(true);
+    } else toast.error(response.mes);
+  };
   const handleRemoveRoom = (name) => {
-    setRooms((prev) => prev.filter((el) => el.title !== name))
-  }
+    setRooms((prev) => prev.filter((el) => el.title !== name));
+  };
   const handleAddRoom = (room) => {
     if (rooms.some((el) => el.title === room.title)) {
-      toast.warning("Tên phòng đã sử dụng")
+      toast.warning("Tên phòng đã sử dụng");
     } else {
-      setRooms((prev) => [...prev, room])
+      setRooms((prev) => [...prev, room]);
     }
-  }
+  };
   return (
     <div className="w-full h-full">
       <div className="flex justify-between py-4 lg:border-b px-4 items-center">
@@ -115,11 +123,21 @@ const CreatePost = () => {
             errors={errors}
             title="Thể loại"
             validate={{ required: "Không được bỏ trống." }}
-            options={catalogs?.map((el) => ({
-              ...el,
-              label: el.value,
-              value: el.id,
-            }))}
+            options={
+              current.rroles.some((role) => role.roleCode === "ADMIN")
+                ? catalogs?.map((el) => ({
+                    ...el,
+                    label: el.value,
+                    value: el.id,
+                  }))
+                : catalogs
+                    ?.filter((el) => [2, 3, 4].includes(el.id))
+                    .map((el) => ({
+                      ...el,
+                      label: el.value,
+                      value: el.id,
+                    }))
+            }
           />
           <InputText
             id="description"
@@ -174,14 +192,18 @@ const CreatePost = () => {
                   onChange={handleReadFileExcel}
                 />
                 {errors && errors["roomfile"] && (
-                  <small className="text-xs text-red-600">{errors["roomfile"].message}</small>
+                  <small className="text-xs text-red-600">
+                    {errors["roomfile"].message}
+                  </small>
                 )}
               </>
             )}
             {createRoomMode === "MANUAL" && (
               <Button
                 className="w-fit"
-                onClick={() => setModal(true, <CreateRoom pushRoom={handleAddRoom} />)}
+                onClick={() =>
+                  setModal(true, <CreateRoom pushRoom={handleAddRoom} />)
+                }
               >
                 Thêm phòng
               </Button>
@@ -211,12 +233,20 @@ const CreatePost = () => {
                         <span className="flex items-center justify-center gap-3">
                           <span
                             className="cursor-pointer"
-                            onClick={() => setModal(true, <EditRoom setRooms={setRooms} editRoom={el} />)}
+                            onClick={() =>
+                              setModal(
+                                true,
+                                <EditRoom setRooms={setRooms} editRoom={el} />
+                              )
+                            }
                             title="Chỉnh sửa / Thêm tiện nghi"
                           >
                             <RiFileEditLine size={18} />
                           </span>
-                          <span onClick={() => handleRemoveRoom(el.title)} title="Xóa">
+                          <span
+                            onClick={() => handleRemoveRoom(el.title)}
+                            title="Xóa"
+                          >
                             <RiDeleteBin6Line size={18} />
                           </span>
                         </span>
@@ -230,7 +260,7 @@ const CreatePost = () => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default CreatePost
+export default CreatePost;

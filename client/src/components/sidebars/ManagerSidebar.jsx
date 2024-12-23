@@ -1,11 +1,16 @@
-import React from "react"
-import { UserInformation } from "../user"
-import { managerSidebar } from "~/utilities/constant"
-import { NavLink } from "react-router-dom"
-import { twMerge } from "tailwind-merge"
-import clsx from "clsx"
+import React from "react";
+import { UserInformation } from "../user";
+import { getManagerSidebar } from "~/utilities/constant"; // Make sure to import the function
+import { NavLink } from "react-router-dom";
+import { twMerge } from "tailwind-merge";
+import clsx from "clsx";
+import { useUserStore } from "~/store"; // Import your user store
 
 const ManagerSidebar = ({ setIsShowMenu }) => {
+  // Get current user roles from the store
+  const { current } = useUserStore(); // Adjust according to your store structure
+  const sidebarItems = getManagerSidebar(current?.rroles); // Get sidebar items based on roles
+
   return (
     <div className="flex flex-col bg-blue-700 text-white h-full justify-between">
       <div className="flex flex-col">
@@ -14,7 +19,7 @@ const ManagerSidebar = ({ setIsShowMenu }) => {
           onClick={() => setIsShowMenu && setIsShowMenu(false)}
           className="mt-6"
         >
-          {managerSidebar.map((el) => (
+          {sidebarItems.map((el) => (
             <NavLink
               className={({ isActive }) =>
                 twMerge(
@@ -34,7 +39,7 @@ const ManagerSidebar = ({ setIsShowMenu }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ManagerSidebar
+export default ManagerSidebar;

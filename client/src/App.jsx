@@ -1,13 +1,15 @@
-import React, { useEffect } from "react"
-import { Route, Routes } from "react-router-dom"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import pathname from "~/utilities/path"
-import { CanHo, Checkout, DetailPost, Home, Login, PhongTro, PublicLayout, TimGhep } from "./pages/public"
-import { useAppStore, useUserStore } from "./store"
-import { MyRoom, Profile, UserLayout, ViewContract } from "./pages/user"
-import { Modal } from "./components/commons"
-import Filter from "./pages/public/Filter"
+import React, { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import pathname from "~/utilities/path";
+import { CanHo, Checkout, DetailPost, DetailNew, Home, Login, PhongTro, PublicLayout, TimGhep, TinTuc, ChatComponent } from "./pages/public";
+import { useAppStore, useUserStore } from "./store";
+import { MyRoom, Profile, UserLayout, ViewContract } from "./pages/user";
+import { Modal } from "./components/commons";
+import Filter from "./pages/public/Filter";
+import Lienhe from "./pages/public/LienHe";
+
 import {
   CreateContract,
   Dashboard,
@@ -18,26 +20,33 @@ import {
   ManagePost,
   ManagerCustomer,
   UpdatePost,
-} from "./pages/manager"
-import { AdminDashboard, AdminLayout, ManagerDashboard } from "./pages/admin"
-import ManageUser from "./pages/admin/ManageUser"
-import clsx from "clsx"
+} from "./pages/manager";
+import { AdminDashboard, AdminLayout, ManagerDashboard } from "./pages/admin";
+import ManageUser from "./pages/admin/ManageUser";
+import clsx from "clsx";
 
 const App = () => {
-  const { getRoles, getCatalogs, isShowModal, contentModal, getCovenients } = useAppStore()
-  const { getCurrent, token } = useUserStore()
+  const { getRoles, getCatalogs, isShowModal, contentModal, getCovenients } = useAppStore();
+  const { getCurrent, token, current } = useUserStore(); // Ensure current user data is available
+
   useEffect(() => {
-    getRoles()
-    getCatalogs()
-    getCovenients()
-  }, [])
+    getRoles();
+    getCatalogs();
+    getCovenients();
+  }, []);
+
   useEffect(() => {
-    if (token) getCurrent()
-  }, [token])
+    if (token) getCurrent();
+  }, [token]);
+
+  // Check if the user has both ADMIN and MANAGER roles
+  const hasAdminAndManagerRole = current?.rroles?.some((role) => role.roleCode === "ADMIN") &&
+                                  current?.rroles?.some((role) => role.roleCode === "MANAGER");
+
   return (
     <main
       className={clsx(
-        "bg-gray-100 ",
+        "bg-gray-100",
         isShowModal ? "w-screen h-screen overflow-hidden" : "w-full h-full overflow-auto"
       )}
     >
@@ -46,14 +55,25 @@ const App = () => {
       <Routes>
         {/* Manager Routes */}
         <Route path={pathname.manager.LAYOUT} element={<ManagerLayout />}>
-          <Route path={pathname.manager.DASHBOARD} element={<Dashboard />} />
-          <Route path={pathname.manager.MANAGE_CONTRACT} element={<ManageContract />} />
-          <Route path={pathname.manager.MANAGE_ROOM} element={<ManageRoom />} />
-          <Route path={pathname.manager.CREATE_CONTRACT} element={<CreateContract />} />
-          <Route path={pathname.manager.MANAGE_POST} element={<ManagePost />} />
-          <Route path={pathname.manager.MANAGE_CUSTOMER} element={<ManagerCustomer />} />
-          <Route path={pathname.manager.UPDATE_POST__POSTID} element={<UpdatePost />} />
-          <Route path={pathname.manager.CREATE_POST} element={<CreatePost />} />
+          {hasAdminAndManagerRole ? (
+            <>
+              <Route path={pathname.manager.DASHBOARD} element={<Dashboard />} />
+              <Route path={pathname.manager.MANAGE_POST} element={<ManagePost />} />
+              <Route path={pathname.manager.UPDATE_POST__POSTID} element={<UpdatePost />} />
+              <Route path={pathname.manager.CREATE_POST} element={<CreatePost />} />
+            </>
+          ) : (
+            <>
+              <Route path={pathname.manager.DASHBOARD} element={<Dashboard />} />
+              <Route path={pathname.manager.MANAGE_CONTRACT} element={<ManageContract />} />
+              <Route path={pathname.manager.MANAGE_ROOM} element={<ManageRoom />} />
+              <Route path={pathname.manager.CREATE_CONTRACT} element={<CreateContract />} />
+              <Route path={pathname.manager.MANAGE_POST} element={<ManagePost />} />
+              <Route path={pathname.manager.MANAGE_CUSTOMER} element={<ManagerCustomer />} />
+              <Route path={pathname.manager.UPDATE_POST__POSTID} element={<UpdatePost />} />
+              <Route path={pathname.manager.CREATE_POST} element={<CreatePost />} />
+            </>
+          )}
         </Route>
 
         {/* Public Routes */}
@@ -63,7 +83,10 @@ const App = () => {
           <Route path={pathname.public.PHONGTRO} element={<PhongTro />} />
           <Route path={pathname.public.CHECKOUT} element={<Checkout />} />
           <Route path={pathname.public.FILTER} element={<Filter />} />
+          <Route path={pathname.public.LIENHE} element={<Lienhe />} />
           <Route path={pathname.public.TIMGHEP} element={<TimGhep />} />
+          <Route path={pathname.public.TINTUC} element={<TinTuc />} />
+          <Route path={pathname.public.DETAIL_NEW__PID} element={<DetailNew />} />
           <Route path={pathname.public.DETAIL_POST__PID} element={<DetailPost />} />
           <Route path={pathname.public.TRANGCHU} element={<Home />} />
         </Route>
@@ -83,15 +106,15 @@ const App = () => {
           <Route path={pathname.admin.DASHBOARD} element={<AdminDashboard />} />
           <Route path={pathname.admin.MANAGE_DASHBOARD} element={<ManagerDashboard />} />
           <Route path={pathname.admin.MANAGE_USER} element={<ManageUser />} />
-          <Route path={pathname.admin.MANAGE_CONTRACT} element={<ManageContract />} />
-          <Route path={pathname.admin.MANAGE_ROOM} element={<ManageRoom />} />
-          <Route path={pathname.admin.CREATE_CONTRACT} element={<CreateContract />} />
           <Route path={pathname.admin.MANAGE_POST} element={<ManagePost />} />
-          <Route path={pathname.admin.MANAGE_CUSTOMER} element={<ManagerCustomer />} />
           <Route path={pathname.admin.UPDATE_POST__POSTID} element={<UpdatePost />} />
           <Route path={pathname.admin.CREATE_POST} element={<CreatePost />} />
         </Route>
       </Routes>
+
+      {/* Chat Component */}
+      <ChatComponent />
+
       <ToastContainer
         position="top-center"
         autoClose={4000}
@@ -105,7 +128,7 @@ const App = () => {
         theme="colored"
       />
     </main>
-  )
-}
+  );
+};
 
-export default App
+export default App;

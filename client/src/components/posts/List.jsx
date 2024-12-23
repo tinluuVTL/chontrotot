@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { apiGetPosts } from "~/apis/post"
-import { PostCard } from "."
+import { PostCard, NewCard,GhepCard } from "."
 import { Pagiantion } from "../paginations"
 import { useAppStore } from "~/store"
 import { useLocation, useSearchParams } from "react-router-dom"
@@ -53,9 +53,17 @@ const List = ({ filters = {}, isHidePagination, tag, codeTag }) => {
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:grid-cols-1">
-        {posts?.rows?.map((el) => (
-          <PostCard key={el.id} {...el} bgCatalog={catalogs?.find((ctg) => ctg.id === el.rCatalog?.id)?.bg} />
-        ))}
+      {posts?.rows?.map((el) => {
+  const bgCatalog = catalogs?.find((ctg) => ctg.id === el.rCatalog?.id)?.bg;
+
+  if (el.rCatalog?.id === 5) {
+    return <NewCard key={el.id} {...el} bgCatalog={bgCatalog} />;
+  } else if (el.rCatalog?.id === 4) {
+    return <GhepCard key={el.id} {...el} bgCatalog={bgCatalog} />;
+  } else {
+    return <PostCard key={el.id} {...el} bgCatalog={bgCatalog} />;
+  }
+})}
       </div>
       {!isHidePagination && <Pagiantion totalCount={posts?.count} limit={import.meta.env.VITE_LIMIT_POSTS} />}
     </div>

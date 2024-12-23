@@ -61,17 +61,18 @@ const UserInformation = () => {
         setModal(false, null)
         if (error.message.includes("reCAPTCHA client element has been removed"))
           toast.info("Vui lòng Reload lại page!")
-        else toast.error("Gửi OTP không thành công, hãy thử sĐT khác!")
+        else toast.error("Gửi OTP không thành công, hãy thử sĐT khác! Hoặc Liên Hệ với ADMIN")
       })
   }
   const handleUpgradeRoleManager = () => {
     Swal.fire({
       icon: "info",
       title: "Thông báo",
-      text: "Để nâng cấp tài khoản thành chủ trọ, bạn phải xác minh SĐT của mình. Hãy cập nhật SĐT chính xác trước khi nâng cấp.",
+      
+      text: "📢Để nâng cấp tài khoản thành chủ trọ, bạn phải xác minh SĐT của mình. Để tránh trường hợp SĐT không hợp lệ bạn nên Liên hệ với admin👨‍💼 để hoàn thành quá trình nâng cấp chủ trọ nhanh hơn ! Bạn Vẫn muốn tiếp tục ?.",
       showCancelButton: true,
       showConfirmButton: true,
-      confirmButtonText: "Xác minh",
+      confirmButtonText: "Tiếp Tục",
       cancelButtonText: "Quay lại",
     }).then((rs) => {
       if (rs.isConfirmed) {

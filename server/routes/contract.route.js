@@ -4,6 +4,7 @@ const { verifyToken, isManager, isAdmin } = require("../middlewares/verifyToken.
 const validateDto = require("../middlewares/validateDto.middleware")
 const joi = require("joi")
 const { stringReq, numberReq, dateReq } = require("../middlewares/schema.middleware")
+
 router.post(
   "/new",
   verifyToken,
@@ -24,6 +25,20 @@ router.post(
   ),
   ctrls.create
 )
+
+router.post(
+  "/contact-email",
+  validateDto(
+    joi.object({
+      name: stringReq,
+      email: joi.string().email().required(),
+      phone: stringReq,
+      message: stringReq
+    })
+  ),
+  ctrls.sendContactEmail  // Đảm bảo hàm này đã được export từ controller
+)
+
 router.get("/admin/",verifyToken, isAdmin,ctrls.getAdmin)
 router.get("/customer", verifyToken, isManager, ctrls.getCustomer)
 router.get("/", verifyToken, ctrls.get)

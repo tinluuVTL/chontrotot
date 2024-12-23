@@ -11,6 +11,8 @@ import { auth } from "~/utilities/firebase.config"
 import { toast } from "react-toastify"
 import { apiLogin, apiRegister, apiValidatePhoneNumber } from "~/apis/user"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import pathname from "~/utilities/path" // Đảm bảo import pathname
+
 const Login = () => {
   const navigate = useNavigate()
   const [varriant, setVarriant] = useState("LOGIN")
@@ -26,10 +28,13 @@ const Login = () => {
     reset,
     watch,
   } = useForm()
+
   useEffect(() => {
     reset()
   }, [varriant])
+
   const roleCode = watch("roleCode")
+
   const onCaptchVerify = () => {
     if (!window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
@@ -41,6 +46,7 @@ const Login = () => {
       })
     }
   }
+
   const handleSendOtp = (phone) => {
     setIsLoading(true)
     onCaptchVerify()
@@ -61,29 +67,32 @@ const Login = () => {
         else toast.error("Gửi OTP không thành công, hãy thử sĐT khác!")
       })
   }
+
   const onSubmit = async (data) => {
     if (varriant === "REGISTER") {
+      const validatePhoneNumber = await apiValidatePhoneNumber({
+        phone: data.phone,
+      })
+
       if (data.roleCode === "MANAGER") {
-        const validatePhoneNumber = await apiValidatePhoneNumber({
-          phone: data.phone,
+        // Hiển thị thông báo và điều hướng đến trang liên hệ
+        toast.info("Bạn không thể chọn vai trò 'MANAGER'. Vui lòng liên hệ với quản trị viên.", {
+          autoClose: false,
+          closeOnClick: false,
+          draggable: false,
+          onClose: () => navigate(`/${pathname.public.LIENHE}`), // Điều hướng đến trang liên hệ khi đóng thông báo
         })
-        if (validatePhoneNumber.success) {
-          setDataRegister(data)
-          handleSendOtp(data.phone)
-        } else toast.error(validatePhoneNumber.mes)
+      } else if (validatePhoneNumber.success) {
+        const response = await apiRegister(data)
+        if (response.success) {
+          toast.success(response.mes)
+          setVarriant("LOGIN")
+        } else toast.error(response.mes)
       } else {
-        const validatePhoneNumber = await apiValidatePhoneNumber({
-          phone: data.phone,
-        })
-        if (validatePhoneNumber.success) {
-          const response = await apiRegister(data)
-          if (response.success) {
-            toast.success(response.mes)
-            setVarriant("LOGIN")
-          } else toast.error(response.mes)
-        } else toast.error(validatePhoneNumber.mes)
+        toast.error(validatePhoneNumber.mes)
       }
     }
+
     if (varriant === "LOGIN") {
       const response = await apiLogin(data)
       if (response.success) {
@@ -93,11 +102,13 @@ const Login = () => {
       } else toast.error(response.mes)
     }
   }
+
   const toggleVariant = () => {
     reset()
     if (varriant === "LOGIN") setVarriant("REGISTER")
     else setVarriant("LOGIN")
   }
+
   return (
     <section className="h-screen w-full relative overflow-hidden">
       <img src="/lg-bg.jpg" alt="backgound-login" className="w-full h-full grayscale object-cover" />
@@ -155,24 +166,12 @@ const Login = () => {
             <Button onClick={handleSubmit(onSubmit)} className="w-full mt-4 mb-3" disabled={isLoading}>
               {varriant === "LOGIN" ? "Đăng nhập" : "Đăng ký"}
             </Button>
-            {/* {varriant === "LOGIN" && <span className="text-sm text-blue-600">Quên mật khẩu?</span>} */}
             <span className="text-sm flex gap-2 text-blue-600">
               <span>{varriant === "LOGIN" ? "Chưa có tài khoản?" : "Đã có tài khoản?"}</span>
               <span onClick={toggleVariant} className="cursor-pointer hover:underline">
                 {varriant === "LOGIN" ? "Đi tới đăng ký mới" : "Đi tới đăng nhập"}
               </span>
             </span>
-            {/* <div className="w-full h-[1px] bg-gray-300 text-center relative">
-              <span className=" mx-auto inline-block px-2 absolute -top-3 left-0 right-0">
-                <span className="bg-white px-2 w-fit text-sm">Hoặc</span>
-              </span>
-            </div>
-            <div className="my-3">
-              <Button className="border-red-600 w-full bg-transparent border text-red-600">
-                <FaGoogle color="red" />
-                <span>Đăng nhập bằng Google</span>
-              </Button>
-            </div> */}
           </form>
         </div>
       </div>
